@@ -11,7 +11,7 @@ import java.util.zip.ZipOutputStream;
 
 public class FileHandler {
 
-    public void createDirectory(String directoryPath) {
+    public void createDirectory(String directoryPath) { 
         try {
             File file = new File(directoryPath);
             if (!file.exists()) {
@@ -22,8 +22,23 @@ public class FileHandler {
         }
     }
 
-    public void removeDirectory() {
-
+    private void removeDirectory(String directoryPath) {
+        try {
+            File file = new File(directoryPath);
+            if (file.exists()) {
+                if (file.isDirectory()) {
+                    File[] files = file.listFiles();
+                    if (files != null) {
+                        for (File f : files) {
+                            f.delete();
+                        }
+                    }
+                }
+                file.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String downloadFile(String fileUrl, String directoryPath) {
@@ -101,6 +116,8 @@ public class FileHandler {
                 inputStream.close();
                 zipOutputStream.closeEntry();
             }
+
+            this.removeDirectory(directoryPath);
 
             zipOutputStream.close();
             outputStream.close();
