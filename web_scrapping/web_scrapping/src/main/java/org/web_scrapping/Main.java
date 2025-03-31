@@ -48,6 +48,9 @@ public class Main {
             if (pathAnexoI != null && pathAnexoII != null) {
                 System.out.println("Arquivos baixados com sucesso!");
                 System.out.println("Iniciando compactação em arquivo zip...");
+
+                fileHandler.zipFiles(directoryPath, "D:Downloads/" + directory +".zip");
+                System.out.println("Arquivos compactados com sucesso!");
             }
 
             System.out.println("Procedimentos ANS finalizados com sucesso!");
