@@ -15,8 +15,8 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String pathAnexoI = "D:Downloads/Anexo_I_Rol_2021RN_465.2021_RN627L.2024.pdf";
-        String csvPath = "D:Downloads/Anexo_I_Rol_2021RN_465.2021_RN627L.2024.csv";
+        String pathAnexoI = "D:/Downloads/Anexo_I_Rol_2021RN_465.2021_RN627L.2024.pdf";
+        String csvPath = "D:/Downloads/Anexo_I_Rol_2021RN_465.2021_RN627L.2024.csv";
 
         try {
             PDDocument document = PDDocument.load(new File(pathAnexoI));
@@ -28,18 +28,37 @@ public class Main {
             for (int i = 3; i <= totalPages; i++) {
                 List<Table> tables = extractTablesFromPage(pathAnexoI, i);
                 for (Table table : tables) {
-                    for (List<RectangularTextContainer> row : table.getRows()) {
+                    List<List<RectangularTextContainer>> rows = table.getRows();
+
+                    for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
+                        List<RectangularTextContainer> row = rows.get(rowIndex);
                         StringBuilder rowText = new StringBuilder();
+
                         for (RectangularTextContainer cell : row) {
-                            rowText.append(cell.getText()).append(";");
+                            String text = cell.getText().trim();
+
+                            if (text.isEmpty()) {
+                                text = "N/A";
+                            }
+
+                            if (rowIndex == 0) {
+                                if (text.equalsIgnoreCase("OD")) {
+                                    text = "Seg. Odontológica";
+                                } else if (text.equalsIgnoreCase("AMB")) {
+                                    text = "Seg. Ambulatorial";
+                                }
+                            }
+
+                            rowText.append(text).append(";");
                         }
+
                         writer.write(rowText.toString().replaceAll(";$", "") + "\n");
                     }
                 }
             }
 
             writer.close();
-            System.out.println("O anexo I foi gerado com sucesso!");
+            System.out.println("O anexo I em formato CSV foi gerado com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }
