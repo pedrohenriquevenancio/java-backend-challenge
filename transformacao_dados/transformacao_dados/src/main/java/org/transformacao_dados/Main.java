@@ -59,6 +59,11 @@ public class Main {
 
             writer.close();
             System.out.println("O anexo I em formato CSV foi gerado com sucesso!");
+
+            FileHandler fileHandler = new FileHandler();
+            fileHandler.zipFiles(csvPath, "D:/Downloads/Teste_Pedro_Henrique_Venancio_Clotilde.zip");
+            fileHandler.removeDirectory(csvPath);
+            System.out.println("O arquivo foi compactado com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }
